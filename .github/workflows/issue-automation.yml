@@ -1,0 +1,30 @@
+name: Issue Automation
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  respond:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check issue label and comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_LABELS: ${{ toJSON(github.event.issue.labels) }}
+        run: |
+          echo "Issue #${ISSUE_NUMBER} labels: ${ISSUE_LABELS}"
+          # Check if label 'bug' exists
+          if echo "${ISSUE_LABELS}" | grep -q '"name":"bug"'; then
+            echo "Bug issue detected. Adding comment."
+            COMMENT="Thank you. We will fix it."
+          elif echo "${ISSUE_LABELS}" | grep -q '"name":"feature"'; then
+            echo "Feature request detected. Adding comment."
+            COMMENT="Thank you, we will consider to include this feature."
+          else
+            echo "Other issue detected. Adding generic comment."
+            COMMENT="Hello, world!"
+          fi
+          # Add comment using GitHub CLI
+          echo "${COMMENT}" | gh issue comment "${ISSUE_NUMBER}" --repo "${{ github.repository }}" --body-file -
+        shell: bash
