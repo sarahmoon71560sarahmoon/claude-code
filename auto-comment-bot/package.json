@@ -1,0 +1,23 @@
+{
+  "name": "auto-comment-bot",
+  "version": "1.0.0",
+  "description": "GitHub automation bot for commenting on and closing issues with specific labels",
+  "main": "automation.js",
+  "scripts": {
+    "start": "node automation.js",
+    "create-test": "node automation.js --create-test"
+  },
+  "dependencies": {
+    "@octokit/rest": "^19.0.0",
+    "dotenv": "^16.0.0"
+  },
+  "keywords": [
+    "github",
+    "automation",
+    "bot",
+    "issues",
+    "comments"
+  ],
+  "author": "sarahmoon71560sarahmoon",
+  "license": "MIT"
+}
