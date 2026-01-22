@@ -1,0 +1,80 @@
+name: Automated Comment Bot
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  comment-on-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Comment on bug issues
+        if: contains(github.event.issue.labels.*.name, 'bug')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueNumber = context.issue.number;
+            
+            await github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: issueNumber,
+              body: `Thank you. We will fix it. Best regards, ${owner}.`
+            });
+      
+      - name: Comment on feature issues
+        if: contains(github.event.issue.labels.*.name, 'feature')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueNumber = context.issue.number;
+            
+            await github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: issueNumber,
+              body: `Thank you, we will consider to include this feature. Best regards, ${owner}.`
+            });
+      
+      - name: Comment on discussion issues
+        if: contains(github.event.issue.labels.*.name, 'discussion')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueNumber = context.issue.number;
+            
+            await github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: issueNumber,
+              body: `Happy to discuss this topic with you. Best regards, ${owner}.`
+            });
+      
+      - name: Comment on issues without labels
+        if: github.event.issue.labels.length == 0
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueNumber = context.issue.number;
+            
+            await github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: issueNumber,
+              body: `Hello, world!`
+            });
