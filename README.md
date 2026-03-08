@@ -1,3 +1,3 @@
-# Automated Comment Bot
+# AI Code Reviewer
 
-A repository to test GitHub automation for adding comments to issues.
+An intelligent code review assistant that analyzes code quality, detects potential bugs, and suggests improvements using machine learning techniques.
